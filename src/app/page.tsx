@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
 import { loadStripe, Appearance } from '@stripe/stripe-js';
 import { CheckoutProvider } from '@stripe/react-stripe-js/checkout';
-import OrderSummary from '@/components/OrderSummary';
-import Habanero from '@/components/Habanero';
+import { Stack, Text } from '@mantine/core';
+import ProductMessage from '@/components/ProductMessage';
 
 const stripePromise = loadStripe('pk_test_fEnfqkUj7brxj0AAGO5Ig8rg', {
   betas: [
@@ -54,18 +53,22 @@ export default function Home() {
         },
       }}
     >
-      <div className="flex flex-col md:flex-row justify-center min-h-screen">
-        <div className="w-full md:flex-1 md:min-h-screen bg-[#f0f0f0] flex md:justify-end justify-center">
-          <div className="w-full max-w-[500px]">
-            <OrderSummary />
-          </div>
-        </div>
-        <div className="w-full md:flex-1 md:min-h-screen flex md:justify-start justify-center">
-          <div className="w-full max-w-[500px]">
-            <Habanero />
-          </div>
-        </div>
-      </div>
+      <Stack p="md">
+        <Text bdrs="md" p="md" bg="gray.1" maw={'75%'} ml="auto">
+          Can you find some warm jackets for my weekend camping trip, based on
+          the weather?
+        </Text>
+
+        <Stack gap="xs">
+          <Text bdrs="md" p="md">
+            Sure! It should be fairly mild this weekend, with cold mornings and
+            spots of rain. Here are a few great options from your favoriate
+            brand. Let me know if you'd like to find anything else.
+          </Text>
+
+          <ProductMessage />
+        </Stack>
+      </Stack>
     </CheckoutProvider>
   );
 }

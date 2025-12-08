@@ -11,12 +11,6 @@ export const ITEMS = {
     price: 31500,
     image: '/products/puffer.png',
   },
-  'sleeping-bag': {
-    name: 'sleeping-bag',
-    title: 'Croagh Sleeping Bag -40F Down',
-    price: 13000,
-    image: '/products/sleeping-bag.png',
-  },
 };
 
 export const SHIPPING_OPTIONS = [
