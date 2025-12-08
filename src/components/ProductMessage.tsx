@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ITEMS } from '@/constants';
 import {
   Group,
@@ -51,8 +51,8 @@ export default function ProductMessage() {
       <Paper withBorder p="md">
         <Group justify="space-between">
           {items.map((item, index) => (
-            <>
-              <Stack key={item.id} gap="xs" align="center" flex={1}>
+            <React.Fragment key={item.id}>
+              <Stack gap="xs" align="center" flex={1}>
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -79,7 +79,7 @@ export default function ProductMessage() {
               </Stack>
 
               {index < items.length - 1 && <Divider orientation="vertical" />}
-            </>
+            </React.Fragment>
           ))}
         </Group>
       </Paper>
