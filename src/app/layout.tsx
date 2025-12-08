@@ -23,8 +23,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Habanero Checkout',
-  description: 'Habanero Checkout',
+  title: 'Habanero Agentic',
+  description: 'Habanero Agentic',
 };
 
 export default function RootLayout({
