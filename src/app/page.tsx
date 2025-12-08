@@ -34,7 +34,7 @@ export default function Home() {
     // Make it look like Galtee Figma
     // @ts-expect-error - condensed inputs not GA'ed yet
     inputs: 'condensed',
-    labels: 'above',
+    labels: 'floating',
   };
 
   return (
