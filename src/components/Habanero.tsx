@@ -11,7 +11,7 @@ export default function Habanero() {
     if (checkoutState.type === 'success' && !didMount.current) {
       const { checkout } = checkoutState;
 
-      // Dont mount twice. Hacky until we have a <PaymentFormElement /> component
+      // Dont create twice. Hacky until we have a <PaymentFormElement /> component
       // @ts-expect-error - checkout.getPaymentFormElement is not public yet
       const existingHabaneroElement = checkout.getPaymentFormElement();
       if (existingHabaneroElement) {
