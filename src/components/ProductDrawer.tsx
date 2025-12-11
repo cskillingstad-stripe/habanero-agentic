@@ -4,7 +4,7 @@ import { Drawer, Text, Group, Image, Stack, Button } from '@mantine/core';
 import { Item } from './ProductMessage';
 import { formatPrice } from './ProductMessage';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
-// import Habanero from './Habanero';
+import Habanero from './Habanero';
 
 export const ProductDrawer = ({
   opened,
@@ -65,7 +65,6 @@ export const ProductDrawer = ({
                 <Button.GroupSection
                   variant="default"
                   bg="var(--mantine-color-body)"
-                  //   miw={80}
                   size="xs"
                   h={24}
                   w={24}
@@ -81,8 +80,7 @@ export const ProductDrawer = ({
         </Group>
 
         {/* Habanero */}
-        {/* <Habanero /> */}
-        <Text ta="center">Habanero agentic goes here</Text>
+        <Habanero />
       </Stack>
     </Drawer>
   );
