@@ -63,7 +63,7 @@ export default function Home() {
           <Text bdrs="md" p="md">
             Sure! It should be fairly mild this weekend, with cold mornings and
             spots of rain. Here are a few great options from your favoriate
-            brand. Let me know if you'd like to find anything else.
+            brand. Let me know if you&apos;d like to find anything else.
           </Text>
 
           <ProductMessage />
