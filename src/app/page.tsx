@@ -29,6 +29,8 @@ export default function Home() {
     variables: {
       // Checkout uses 500 for medium weight (ie. in the Pay Button)
       fontWeightMedium: '500',
+      // Galtee primary color (button)
+      colorPrimary: '#222725',
     },
 
     // Make it look like Galtee Figma
