@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import '@mantine/core/styles.css';
 import {
-  ColorSchemeScript,
   Flex,
   MantineProvider,
   mantineHtmlProps,
@@ -34,13 +33,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" {...mantineHtmlProps}>
-      <head>
-        <ColorSchemeScript />
-      </head>
+      <head />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen w-full`}
       >
-        <MantineProvider>
+        <MantineProvider forceColorScheme="light">
           <Flex direction="column" h="100vh">
             <Header />
             <ScrollArea flex={1}>{children}</ScrollArea>
