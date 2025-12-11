@@ -45,7 +45,7 @@ export const ProductDrawer = ({
       }}
     >
       {/* Order summary */}
-      <Stack>
+      <Stack gap="lg">
         <Group>
           <Image src={item?.image} alt={item?.name} maw={48} bdrs="md" />
 
