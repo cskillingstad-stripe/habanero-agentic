@@ -21,7 +21,9 @@ export default function Habanero() {
       }
 
       // @ts-expect-error - checkout.createPaymentFormElement is not public yet
-      const habaneroElement = checkout.createPaymentFormElement();
+      const habaneroElement = checkout.createPaymentFormElement({
+        layout: 'compact',
+      });
 
       // @ts-expect-error - event not typed
       habaneroElement.on('confirm', (event) => {
