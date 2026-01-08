@@ -97,18 +97,18 @@ export async function POST(request: Request) {
       // },
 
       // Enable SPM
-      customer: 'cus_TPW2UsM4sSDvGh',
-      customer_update: {
-        name: 'auto',
-        shipping: 'auto',
-      },
-      payment_intent_data: {
-        setup_future_usage: 'off_session',
-      },
-      saved_payment_method_options: {
-        payment_method_save: 'enabled',
-        payment_method_remove: 'enabled',
-      },
+      // customer: 'cus_TPW2UsM4sSDvGh',
+      // customer_update: {
+      //   name: 'auto',
+      //   shipping: 'auto',
+      // },
+      // payment_intent_data: {
+      //   setup_future_usage: 'off_session',
+      // },
+      // saved_payment_method_options: {
+      //   payment_method_save: 'enabled',
+      //   payment_method_remove: 'enabled',
+      // },
 
       // custom_fields: [
       //   {
