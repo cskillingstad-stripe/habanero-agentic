@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { ITEMS, SHIPPING_OPTIONS } from '@/constants';
 
 const stripe = new Stripe(process.env.STRIPE_TEST_SK!, {
-  apiVersion: '2025-08-27.basil',
+  apiVersion: '2025-08-27.basil;custom_checkout_habanero_preview=v1',
 });
 
 // const calculateOrderAmount = (_items: any) => {
@@ -109,6 +109,24 @@ export async function POST(request: Request) {
         payment_method_save: 'enabled',
         payment_method_remove: 'enabled',
       },
+
+      // custom_fields: [
+      //   {
+      //     key: 'test1', // Unique identifier for this field
+      //     type: 'text',
+      //     label: {
+      //       type: 'custom',
+      //       custom: 'Test custom field 1',
+      //     },
+      //     // Optional configuration for text fields:
+      //     // text: {
+      //     //   minimum_length: 2,
+      //     //   maximum_length: 50,
+      //     //   default_value: 'Your text here'
+      //     // },
+      //     optional: false, // Set to true to make it optional
+      //   },
+      // ],
 
       return_url: `${request.headers.get('origin')}/complete?session_id={CHECKOUT_SESSION_ID}`,
     });
