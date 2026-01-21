@@ -25,6 +25,8 @@ export default function Habanero() {
         layout: 'compact',
       });
 
+      window.habaneroElement = habaneroElement;
+
       // @ts-expect-error - event not typed
       habaneroElement.on('confirm', (event) => {
         checkout.confirm({
