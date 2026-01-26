@@ -1,80 +1,65 @@
-import { useEffect, useRef } from 'react';
-import { useCheckout } from '@stripe/react-stripe-js/checkout';
+import { useEffect } from 'react';
+import {
+  useCheckout,
+  PaymentFormElement,
+} from '@stripe/react-stripe-js/checkout';
 
 export default function Habanero() {
   const checkoutState = useCheckout();
-  const ref = useRef<HTMLDivElement>(null);
-  const didMount = useRef(false);
 
-  // No <HabaneroElement exists yet, use checkout.createhHabaneroElement to hack it in
+  // Expose checkout to window for debugging
   useEffect(() => {
-    if (checkoutState.type === 'success' && !didMount.current) {
-      const { checkout } = checkoutState;
-
-      window.checkout = checkout;
-
-      // Dont create twice. Hacky until we have a <PaymentFormElement /> component
-      // @ts-expect-error - checkout.getPaymentFormElement is not public yet
-      const existingHabaneroElement = checkout.getPaymentFormElement();
-      if (existingHabaneroElement) {
-        didMount.current = true;
-        existingHabaneroElement.mount(ref.current);
-        return;
-      }
-
-      // @ts-expect-error - checkout.createPaymentFormElement is not public yet
-      const habaneroElement = checkout.createPaymentFormElement({
-        layout: 'compact',
-      });
-
-      // Add event logs for bug bash
-      // @ts-expect-error - event not typed
-      habaneroElement.on('change', (event) => {
-        console.log('bblog change: ', event);
-      });
-      // @ts-expect-error - event not typed
-      habaneroElement.on('ready', (event) => {
-        console.log('bblog ready: ', event);
-      });
-      // @ts-expect-error - event not typed
-      habaneroElement.on('focus', (event) => {
-        console.log('bblog focus: ', event);
-      });
-      // @ts-expect-error - event not typed
-      habaneroElement.on('blur', (event) => {
-        console.log('bblog blur: ', event);
-      });
-      // @ts-expect-error - event not typed
-      habaneroElement.on('escape', (event) => {
-        console.log('bblog escape: ', event);
-      });
-      // @ts-expect-error - event not typed
-      habaneroElement.on('loaderror', (event) => {
-        console.log('bblog loaderror: ', event);
-      });
-      // @ts-expect-error - event not typed
-      habaneroElement.on('loaderstart', (event) => {
-        console.log('bblog loaderstart: ', event);
-      });
-
-      // @ts-expect-error - event not typed
-      habaneroElement.on('confirm', (event) => {
-        console.log('bblog confirm: ', event);
-
-        checkout.confirm({
-          // @ts-expect-error - paymentFormConfirmEvent is not public yet
-          paymentFormConfirmEvent: event,
-          // Placeholder until we collect email
-          // email: 'test@stripe.com',
-        });
-      });
-
-      window.habaneroElement = habaneroElement;
-
-      habaneroElement.mount(ref.current);
-      didMount.current = true;
+    if (checkoutState.type === 'success' && checkoutState.checkout) {
+      // @ts-expect-error - checkout not typed on window
+      window.checkout = checkoutState.checkout;
     }
   }, [checkoutState]);
 
-  return <div ref={ref} />;
+  return (
+    <div>
+      <PaymentFormElement
+        options={{
+          layout: 'compact',
+        }}
+        onChange={(event) => {
+          console.log('bblog change: ', event);
+        }}
+        onReady={(element) => {
+          console.log('bblog ready: ', element);
+
+          // Expose to window for debugging
+          window.paymentFormElement = element;
+        }}
+        onFocus={(event) => {
+          console.log('bblog focus: ', event);
+        }}
+        onBlur={(event) => {
+          console.log('bblog blur: ', event);
+        }}
+        onEscape={(event) => {
+          console.log('bblog escape');
+        }}
+        onLoadError={(event) => {
+          console.log('bblog loaderror: ', event);
+        }}
+        onLoaderStart={(event) => {
+          console.log('bblog loaderstart: ', event);
+        }}
+        onConfirm={(event) => {
+          console.log('bblog confirm: ', event);
+
+          if (checkoutState.type === 'success' && checkoutState.checkout) {
+            const { checkout } = checkoutState;
+
+            checkout.confirm({
+              // @ts-expect-error - paymentFormConfirmEvent is not public yet
+              paymentFormConfirmEvent: event,
+              // Placeholder until we collect email
+              // email: 'test@stripe.com',
+            });
+          }
+        }}
+      />
+    </div>
+  );
 }
