@@ -11,6 +11,8 @@ export default function Habanero() {
     if (checkoutState.type === 'success' && !didMount.current) {
       const { checkout } = checkoutState;
 
+      window.checkout = checkout;
+
       // Dont create twice. Hacky until we have a <PaymentFormElement /> component
       // @ts-expect-error - checkout.getPaymentFormElement is not public yet
       const existingHabaneroElement = checkout.getPaymentFormElement();
@@ -25,10 +27,40 @@ export default function Habanero() {
         layout: 'compact',
       });
 
-      window.habaneroElement = habaneroElement;
+      // Add event logs for bug bash
+      // @ts-expect-error - event not typed
+      habaneroElement.on('change', (event) => {
+        console.log('bblog change: ', event);
+      });
+      // @ts-expect-error - event not typed
+      habaneroElement.on('ready', (event) => {
+        console.log('bblog ready: ', event);
+      });
+      // @ts-expect-error - event not typed
+      habaneroElement.on('focus', (event) => {
+        console.log('bblog focus: ', event);
+      });
+      // @ts-expect-error - event not typed
+      habaneroElement.on('blur', (event) => {
+        console.log('bblog blur: ', event);
+      });
+      // @ts-expect-error - event not typed
+      habaneroElement.on('escape', (event) => {
+        console.log('bblog escape: ', event);
+      });
+      // @ts-expect-error - event not typed
+      habaneroElement.on('loaderror', (event) => {
+        console.log('bblog loaderror: ', event);
+      });
+      // @ts-expect-error - event not typed
+      habaneroElement.on('loaderstart', (event) => {
+        console.log('bblog loaderstart: ', event);
+      });
 
       // @ts-expect-error - event not typed
       habaneroElement.on('confirm', (event) => {
+        console.log('bblog confirm: ', event);
+
         checkout.confirm({
           // @ts-expect-error - paymentFormConfirmEvent is not public yet
           paymentFormConfirmEvent: event,
@@ -36,6 +68,8 @@ export default function Habanero() {
           // email: 'test@stripe.com',
         });
       });
+
+      window.habaneroElement = habaneroElement;
 
       habaneroElement.mount(ref.current);
       didMount.current = true;
