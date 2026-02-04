@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import '@mantine/core/styles.css';
 import {
@@ -33,7 +34,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" {...mantineHtmlProps}>
-      <head />
+      <head>
+        {/* Load local Stripe.js if NEXT_PUBLIC_STRIPE_JS_URL is set */}
+        {process.env.NEXT_PUBLIC_STRIPE_JS_URL && (
+          <Script
+            src={process.env.NEXT_PUBLIC_STRIPE_JS_URL}
+            strategy="beforeInteractive"
+          />
+        )}
+          <title>Habanero</title>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen w-full`}
       >
