@@ -2,7 +2,20 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Environment Setup
+
+Create a `.env.local` file in the project root with your Stripe keys:
+
+```bash
+STRIPE_TEST_SK=sk_test_your_secret_key
+NEXT_PUBLIC_STRIPE_PK=pk_test_your_publishable_key
+NEXT_PUBLIC_STRIPE_JS_URL=http://localhost:3001/clover/stripe.js  # Optional: for local Stripe.js
+```
+
+**Notes:**
+- `NEXT_PUBLIC_STRIPE_JS_URL` is optional - if not set, uses the standard `@stripe/stripe-js` package
+
+### Run the Development Server
 
 ```bash
 npm run dev

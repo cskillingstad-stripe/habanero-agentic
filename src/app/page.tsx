@@ -1,20 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { loadStripe, Appearance } from '@stripe/stripe-js';
+import type { Appearance } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { CheckoutProvider } from '@stripe/react-stripe-js/checkout';
 import { Stack, Text } from '@mantine/core';
 import ProductMessage from '@/components/ProductMessage';
 import { Loader } from '@mantine/core';
+import { loadLocalStripe } from '@/lib/stripe';
 
-const stripePromise = loadStripe('pk_test_fEnfqkUj7brxj0AAGO5Ig8rg', {
+const stripeOptions = {
   betas: [
     // "custom_checkout_beta_6",
     // 'custom_checkout_adaptive_pricing_2',
     // "custom_checkout_tax_id_1",
     'custom_checkout_payment_form_1',
   ],
-});
+};
+
+// Use local Stripe.js if NEXT_PUBLIC_STRIPE_JS_URL is set, otherwise use production
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_JS_URL
+  ? loadLocalStripe(process.env.NEXT_PUBLIC_STRIPE_PK!, stripeOptions)
+  : loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK!, stripeOptions);
 
 export default function Home() {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
