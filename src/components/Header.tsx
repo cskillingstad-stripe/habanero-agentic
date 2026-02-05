@@ -6,7 +6,9 @@ import { IconFilter2Spark, IconUpload, IconDots } from '@tabler/icons-react';
 export const Header = () => {
   return (
     <Group justify="space-between" align="center" p="md">
-      <IconFilter2Spark size={16} />
+      <a href="https://go/loginas/acct_1SxXw4LkR3ESQLj1" target="_blank">
+        <IconFilter2Spark size={16} />
+      </a>
 
       <Group>
         <IconUpload size={16} />
