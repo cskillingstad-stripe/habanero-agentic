@@ -82,7 +82,7 @@ export default function Home() {
         <Stack gap="xs">
           <Text bdrs="md" p="md">
             Sure! It should be fairly mild this weekend, with cold mornings and
-            spots of rain. Here are a few great options from your favoriate
+            spots of rain. Here are a few great options from your favorite
             brand. Let me know if you&apos;d like to find anything else.
           </Text>
 
