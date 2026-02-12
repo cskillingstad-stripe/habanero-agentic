@@ -7,14 +7,12 @@ import { Stack, Text } from '@mantine/core';
 import ProductMessage from '@/components/ProductMessage';
 import { Loader } from '@mantine/core';
 
-const stripePromise = loadStripe('pk_test_fEnfqkUj7brxj0AAGO5Ig8rg', {
-  betas: [
-    // "custom_checkout_beta_6",
-    // 'custom_checkout_adaptive_pricing_2',
-    // "custom_checkout_tax_id_1",
-    'custom_checkout_payment_form_1',
-  ],
-});
+const stripePromise = loadStripe(
+  'pk_test_51Sz0IEDpcOtDCQGwx2X8wL1zsCzRUSE0icHCewahT2aXB9shwR7mwqOLCxgrJD1kjMGXvshDb4LDNqnUSRnLAOLF00EunLBkWy',
+  {
+    betas: ['custom_checkout_payment_form_1'],
+  }
+);
 
 export default function Home() {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
