@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useCheckout,
   PaymentFormElement,
@@ -6,6 +6,19 @@ import {
 
 export default function Habanero() {
   const checkoutState = useCheckout();
+  const [showBorder, setShowBorder] = useState(false);
+
+  // Show border around Habanero on Cmd + H
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'h') {
+        e.preventDefault();
+        setShowBorder((b) => !b);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   // Expose checkout to window for debugging
   useEffect(() => {
@@ -16,7 +29,12 @@ export default function Habanero() {
   }, [checkoutState]);
 
   return (
-    <div>
+    <div
+      style={{
+        boxShadow: showBorder ? '0 0 0 2px #2563eb' : undefined,
+        borderRadius: showBorder ? '8px' : undefined,
+      }}
+    >
       <PaymentFormElement
         options={{
           layout: 'compact',
