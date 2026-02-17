@@ -15,7 +15,7 @@ const stripe = new Stripe(process.env.STRIPE_TEST_SK!, {
 
 export async function POST(request: Request) {
   try {
-    // const body = await request.json();
+    const body = await request.json();
     // const { items } = body;
     // const items = [];
 
@@ -100,18 +100,22 @@ export async function POST(request: Request) {
       // },
 
       // Enable SPM
-      // customer: 'cus_TvOzXu1J5jSRw2',
-      // customer_update: {
-      //   name: 'auto',
-      //   shipping: 'auto',
-      // },
+      customer: body.returningUser ? 'cus_TvOzXu1J5jSRw2' : undefined,
+      customer_update: body.returningUser
+        ? {
+            name: 'auto',
+            shipping: 'auto',
+          }
+        : undefined,
       // payment_intent_data: {
       //   setup_future_usage: 'off_session',
       // },
-      // saved_payment_method_options: {
-      //   payment_method_save: 'enabled',
-      //   payment_method_remove: 'enabled',
-      // },
+      saved_payment_method_options: body.returningUser
+        ? {
+            payment_method_save: 'enabled',
+            payment_method_remove: 'enabled',
+          }
+        : undefined,
 
       // custom_fields: [
       //   {

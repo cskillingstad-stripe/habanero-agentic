@@ -6,6 +6,7 @@ import { CheckoutProvider } from '@stripe/react-stripe-js/checkout';
 import { Stack, Text } from '@mantine/core';
 import ProductMessage from '@/components/ProductMessage';
 import { Loader } from '@mantine/core';
+import { useSearchParams } from 'next/navigation';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_TEST_PK!, {
   betas: ['custom_checkout_payment_form_1'],
@@ -13,11 +14,15 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_TEST_PK!, {
 
 export default function Home() {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchClientSecret = async () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
+        body: JSON.stringify({
+          returningUser: searchParams.get('returningUser') === 'true',
+        }),
       });
       const data = await res.json();
       setClientSecret(data.clientSecret);
