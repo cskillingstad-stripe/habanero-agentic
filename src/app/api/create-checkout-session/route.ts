@@ -1,6 +1,6 @@
-import {NextResponse} from 'next/server';
+import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import {ITEMS, SHIPPING_OPTIONS} from '@/constants';
+import { ITEMS, SHIPPING_OPTIONS } from '@/constants';
 
 const stripe = new Stripe(process.env.STRIPE_TEST_SK!, {
   apiVersion: '2025-08-27.basil;custom_checkout_payment_form_preview=v1',
@@ -90,14 +90,14 @@ export async function POST(request: Request) {
         // Hopefully Guacamole supports this
         // required: 'if_supported',
       },
-      // TODO(cskillingstad): name_collection not supported for ui_mode: 'custom'
-      // When this is enabled, TIDE should not show business name input
-      // Hopefully Guacamole supports this
-      // name_collection: {
-      //   business: {
-      //     enabled: true,
-      //   },
-      // },
+      name_collection: {
+        individual: {
+          enabled: true,
+        },
+        business: {
+          enabled: true,
+        },
+      },
 
       // Enable SPM
       // customer: 'cus_TvOzXu1J5jSRw2',
@@ -134,12 +134,12 @@ export async function POST(request: Request) {
       return_url: `${request.headers.get('origin')}/complete?session_id={CHECKOUT_SESSION_ID}`,
     });
 
-    return NextResponse.json({clientSecret: session.client_secret});
+    return NextResponse.json({ clientSecret: session.client_secret });
   } catch (error) {
     console.error('Error creating checkout session:', error);
     return NextResponse.json(
-      {error: 'Error creating checkout session'},
-      {status: 500}
+      { error: 'Error creating checkout session' },
+      { status: 500 }
     );
   }
 }
