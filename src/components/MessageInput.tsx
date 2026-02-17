@@ -1,11 +1,11 @@
 'use client';
 
 import { IconMicrophone, IconSend2 } from '@tabler/icons-react';
-import { Stack, TextInput, Text } from '@mantine/core';
+import { Stack, TextInput } from '@mantine/core';
 
 export const MessageInput = () => {
   return (
-    <Stack gap={0} px="md">
+    <Stack gap={0} px="md" pb="md">
       <TextInput
         variant="filled"
         size="lg"
@@ -13,10 +13,6 @@ export const MessageInput = () => {
         leftSection={<IconMicrophone size={16} />}
         rightSection={<IconSend2 size={16} />}
       />
-
-      <Text p="md" size="sm" ta="center">
-        lora.com
-      </Text>
     </Stack>
   );
 };

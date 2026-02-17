@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ITEMS } from '@/constants';
 import {
   Group,
@@ -45,6 +45,32 @@ export const formatPrice = (price: number) => {
 
 export default function ProductMessage() {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [closingItem, setClosingItem] = useState<Item | null>(null);
+  const [drawerOpened, setDrawerOpened] = useState(false);
+  const isClosing = closingItem !== null;
+
+  // Delay opened to true so Mantine can run the enter (slide-up) transition
+  useEffect(() => {
+    if (selectedItem) {
+      const id = requestAnimationFrame(() => setDrawerOpened(true));
+      return () => cancelAnimationFrame(id);
+    } else {
+      setDrawerOpened(false);
+    }
+  }, [selectedItem]);
+
+  const handleClose = () => {
+    setClosingItem(selectedItem);
+    setSelectedItem(null);
+  };
+
+  const handleExitTransitionEnd = () => {
+    setClosingItem(null);
+  };
+
+  const showDrawer = selectedItem || isClosing;
+  const drawerItem = selectedItem ?? closingItem;
+  const opened = !!selectedItem && drawerOpened;
 
   return (
     <>
@@ -84,11 +110,14 @@ export default function ProductMessage() {
         </Group>
       </Paper>
 
-      <ProductDrawer
-        opened={!!selectedItem}
-        onClose={() => setSelectedItem(null)}
-        item={selectedItem}
-      />
+      {showDrawer && drawerItem && (
+        <ProductDrawer
+          opened={opened}
+          onClose={handleClose}
+          onExitTransitionEnd={handleExitTransitionEnd}
+          item={drawerItem}
+        />
+      )}
     </>
   );
 }

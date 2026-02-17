@@ -1,11 +1,11 @@
 'use client';
 
-import {useState, useEffect} from 'react';
-import {loadStripe, Appearance} from '@stripe/stripe-js';
-import {CheckoutProvider} from '@stripe/react-stripe-js/checkout';
-import {Stack, Text} from '@mantine/core';
+import { useState, useEffect } from 'react';
+import { loadStripe, Appearance } from '@stripe/stripe-js';
+import { CheckoutProvider } from '@stripe/react-stripe-js/checkout';
+import { Stack, Text } from '@mantine/core';
 import ProductMessage from '@/components/ProductMessage';
-import {Loader} from '@mantine/core';
+import { Loader } from '@mantine/core';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_TEST_PK!, {
   betas: ['custom_checkout_payment_form_1'],
@@ -43,8 +43,11 @@ export default function Home() {
 
   if (!clientSecret) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader size="lg" />
+      <div
+        className="flex items-center justify-center"
+        style={{ minHeight: '65vh' }}
+      >
+        <Loader size="lg" color="dark" />
       </div>
     );
   }
