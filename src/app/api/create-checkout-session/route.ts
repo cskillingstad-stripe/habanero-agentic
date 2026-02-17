@@ -47,20 +47,35 @@ export async function POST(request: Request) {
       // All needed for payment mode
       mode: 'payment',
       // payment_method_types: ['card', 'us_bank_account', 'klarna'],
-      // Hardcode for now just one per ITEM
-      line_items: Object.values(ITEMS).map((item) => ({
-        price_data: {
-          currency: 'cad',
-          product_data: {
-            name: item.name,
+      // Hardcode for now just one of the first ITEM
+      line_items: [
+        {
+          price_data: {
+            currency: 'cad',
+            product_data: {
+              name: ITEMS.fleece.name,
+            },
+            unit_amount: ITEMS.fleece.price,
           },
-          unit_amount: item.price,
+          quantity: 1,
+          adjustable_quantity: {
+            enabled: true,
+          },
         },
-        quantity: 1,
-        adjustable_quantity: {
-          enabled: true,
-        },
-      })),
+      ],
+      // line_items: Object.values(ITEMS).map((item) => ({
+      //   price_data: {
+      //     currency: 'cad',
+      //     product_data: {
+      //       name: item.name,
+      //     },
+      //     unit_amount: item.price,
+      //   },
+      //   quantity: 1,
+      //   adjustable_quantity: {
+      //     enabled: true,
+      //   },
+      // })),
       // Shipping address collection + methods
       shipping_address_collection: {
         allowed_countries: ['US', 'CA'],
