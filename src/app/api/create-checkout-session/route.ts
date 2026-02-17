@@ -90,14 +90,14 @@ export async function POST(request: Request) {
         // Hopefully Guacamole supports this
         // required: 'if_supported',
       },
-      name_collection: {
-        individual: {
-          enabled: true,
-        },
-        business: {
-          enabled: true,
-        },
-      },
+      // name_collection: {
+      //   individual: {
+      //     enabled: true,
+      //   },
+      //   business: {
+      //     enabled: true,
+      //   },
+      // },
 
       // Enable SPM
       // customer: 'cus_TvOzXu1J5jSRw2',
