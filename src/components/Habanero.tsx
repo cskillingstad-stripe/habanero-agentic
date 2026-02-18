@@ -1,11 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useCheckout,
   PaymentFormElement,
 } from '@stripe/react-stripe-js/checkout';
+import { useSearchParams } from 'next/navigation';
 
 export default function Habanero() {
   const checkoutState = useCheckout();
+  const [showBorder, setShowBorder] = useState(false);
+  const searchParams = useSearchParams();
+
+  // Show border around Habanero on Cmd + H
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'h') {
+        e.preventDefault();
+        setShowBorder((b) => !b);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   // Expose checkout to window for debugging
   useEffect(() => {
@@ -16,10 +31,30 @@ export default function Habanero() {
   }, [checkoutState]);
 
   return (
-    <div>
+    <div
+      style={{
+        boxShadow: showBorder ? '0 0 0 2px #2563eb' : undefined,
+        borderRadius: showBorder ? '8px' : undefined,
+      }}
+    >
       <PaymentFormElement
         options={{
           layout: 'compact',
+          contacts:
+            searchParams.get('returningUser') === 'true'
+              ? [
+                  {
+                    name: 'Jenny Rosen',
+                    address: {
+                      line1: '354 Oyster Point Blvd',
+                      city: 'South San Francisco',
+                      state: 'CA',
+                      country: 'US',
+                      postal_code: '94080',
+                    },
+                  },
+                ]
+              : undefined,
         }}
         onChange={(event) => {
           console.log('bblog change: ', event);

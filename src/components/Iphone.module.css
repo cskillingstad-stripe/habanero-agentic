@@ -1,0 +1,54 @@
+/* Simple iPhone: black wrapper with padding, white screen with matching radius */
+.root {
+  width: var(--iphone-width, 390px);
+  aspect-ratio: 78 / 163;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--iphone-shadow, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
+  background: #000;
+  border-radius: 48px;
+  overflow: hidden;
+}
+
+.wrapper {
+  flex: 1;
+  min-height: 0;
+  background: #000;
+  padding: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 36px = 48 - 12 so screen curve matches the root curve inset by padding */
+.screen {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  border-radius: 36px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.drawerPortal {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* When drawer is portaled here, allow clicks so overlay close works */
+.drawerPortal:not(:empty) {
+  pointer-events: auto;
+}

@@ -17,7 +17,7 @@ const stripe = new Stripe(
 
 export async function POST(request: Request) {
   try {
-    // const body = await request.json();
+    const body = await request.json();
     // const { items } = body;
     // const items = [];
 
@@ -48,21 +48,36 @@ export async function POST(request: Request) {
 
       // All needed for payment mode
       mode: 'payment',
-      payment_method_types: ['card', 'us_bank_account', 'klarna'],
-      // Hardcode for now just one per ITEM
-      line_items: Object.values(ITEMS).map((item) => ({
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: item.name,
+      // payment_method_types: ['card', 'us_bank_account', 'klarna'],
+      // Hardcode for now just one of the first ITEM
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: ITEMS.fleece.name,
+            },
+            unit_amount: ITEMS.fleece.price,
           },
-          unit_amount: item.price,
+          quantity: 1,
+          adjustable_quantity: {
+            enabled: true,
+          },
         },
-        quantity: 1,
-        adjustable_quantity: {
-          enabled: true,
-        },
-      })),
+      ],
+      // line_items: Object.values(ITEMS).map((item) => ({
+      //   price_data: {
+      //     currency: 'cad',
+      //     product_data: {
+      //       name: item.name,
+      //     },
+      //     unit_amount: item.price,
+      //   },
+      //   quantity: 1,
+      //   adjustable_quantity: {
+      //     enabled: true,
+      //   },
+      // })),
       // Shipping address collection + methods
       shipping_address_collection: {
         allowed_countries: ['US', 'CA'],
@@ -92,28 +107,32 @@ export async function POST(request: Request) {
         // Hopefully Guacamole supports this
         // required: 'if_supported',
       },
-      // TODO(cskillingstad): name_collection not supported for ui_mode: 'custom'
-      // When this is enabled, TIDE should not show business name input
-      // Hopefully Guacamole supports this
       // name_collection: {
+      //   individual: {
+      //     enabled: true,
+      //   },
       //   business: {
       //     enabled: true,
       //   },
       // },
 
       // Enable SPM
-      // customer: 'cus_TPW2UsM4sSDvGh',
-      // customer_update: {
-      //   name: 'auto',
-      //   shipping: 'auto',
-      // },
+      customer: body.returningUser ? 'cus_TvOzXu1J5jSRw2' : undefined,
+      customer_update: body.returningUser
+        ? {
+            name: 'auto',
+            shipping: 'auto',
+          }
+        : undefined,
       // payment_intent_data: {
       //   setup_future_usage: 'off_session',
       // },
-      // saved_payment_method_options: {
-      //   payment_method_save: 'enabled',
-      //   payment_method_remove: 'enabled',
-      // },
+      saved_payment_method_options: body.returningUser
+        ? {
+            payment_method_save: 'enabled',
+            payment_method_remove: 'enabled',
+          }
+        : undefined,
 
       // custom_fields: [
       //   {
