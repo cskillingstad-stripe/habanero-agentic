@@ -10,7 +10,7 @@ export default function Habanero() {
   const [showBorder, setShowBorder] = useState(false);
   const searchParams = useSearchParams();
 
-  // Show border around Habanero on Cmd + H
+  // Show border around Habanero on Cmd + B
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
@@ -65,6 +65,7 @@ export default function Habanero() {
           console.log('bblog ready: ', element);
 
           // Expose to window for debugging
+          // @ts-expect-error - paymentFormElement is not typed on window
           window.paymentFormElement = element;
         }}
         onFocus={(event) => {
@@ -73,12 +74,14 @@ export default function Habanero() {
         onBlur={(event) => {
           console.log('bblog blur: ', event);
         }}
+        // @ts-expect-error - onEscape is not typed on PaymentFormElement
         onEscape={(event) => {
           console.log('bblog escape');
         }}
         onLoadError={(event) => {
           console.log('bblog loaderror: ', event);
         }}
+        // @ts-expect-error - event is not typed on PaymentFormElement
         onLoaderStart={(event) => {
           console.log('bblog loaderstart: ', event);
         }}
@@ -89,7 +92,6 @@ export default function Habanero() {
             const { checkout } = checkoutState;
 
             checkout.confirm({
-              // @ts-expect-error - paymentFormConfirmEvent is not public yet
               paymentFormConfirmEvent: event,
               // Placeholder until we collect email
               // email: 'test@stripe.com',
