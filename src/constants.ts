@@ -13,6 +13,8 @@ export const ITEMS = {
   },
 };
 
+export const STRIPE_PRIMARY_COLOR = '#222725';
+
 export const SHIPPING_OPTIONS = [
   {
     name: 'Free standard shipping',

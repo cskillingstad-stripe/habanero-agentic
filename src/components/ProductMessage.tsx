@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ITEMS } from '@/constants';
 import {
   Group,
@@ -47,30 +47,39 @@ export default function ProductMessage() {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [closingItem, setClosingItem] = useState<Item | null>(null);
   const [drawerOpened, setDrawerOpened] = useState(false);
+  const openRafRef = useRef<number | null>(null);
   const isClosing = closingItem !== null;
 
-  // Delay opened to true so Mantine can run the enter (slide-up) transition
   useEffect(() => {
-    if (selectedItem) {
-      const id = requestAnimationFrame(() => setDrawerOpened(true));
-      return () => cancelAnimationFrame(id);
-    } else {
-      setDrawerOpened(false);
-    }
-  }, [selectedItem]);
+    return () => {
+      if (openRafRef.current !== null) {
+        cancelAnimationFrame(openRafRef.current);
+      }
+    };
+  }, []);
 
-  const handleClose = () => {
-    setClosingItem(selectedItem);
-    setSelectedItem(null);
+  const openProductDrawerForItem = (item: Item) => {
+    setSelectedItem(item);
+    setClosingItem(null);
+    setDrawerOpened(false);
+    openRafRef.current = requestAnimationFrame(() => {
+      setDrawerOpened(true);
+      openRafRef.current = null;
+    });
   };
 
-  const handleExitTransitionEnd = () => {
+  const closeDrawer = () => {
+    setClosingItem(selectedItem);
+    setSelectedItem(null);
+    setDrawerOpened(false);
+  };
+
+  const handleDrawerExitEnd = () => {
     setClosingItem(null);
   };
 
   const showDrawer = selectedItem || isClosing;
   const drawerItem = selectedItem ?? closingItem;
-  const opened = !!selectedItem && drawerOpened;
 
   return (
     <>
@@ -98,7 +107,7 @@ export default function ProductMessage() {
                 <Button
                   variant="default"
                   size="xs"
-                  onClick={() => setSelectedItem(item)}
+                  onClick={() => openProductDrawerForItem(item)}
                 >
                   Buy
                 </Button>
@@ -112,9 +121,9 @@ export default function ProductMessage() {
 
       {showDrawer && drawerItem && (
         <ProductDrawer
-          opened={opened}
-          onClose={handleClose}
-          onExitTransitionEnd={handleExitTransitionEnd}
+          opened={!!selectedItem && drawerOpened}
+          onClose={closeDrawer}
+          onExitTransitionEnd={handleDrawerExitEnd}
           item={drawerItem}
         />
       )}

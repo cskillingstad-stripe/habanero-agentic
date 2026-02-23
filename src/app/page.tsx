@@ -7,6 +7,7 @@ import { Stack, Text } from '@mantine/core';
 import ProductMessage from '@/components/ProductMessage';
 import { Loader } from '@mantine/core';
 import { useSearchParams } from 'next/navigation';
+import { STRIPE_PRIMARY_COLOR } from '@/constants';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_TEST_PK!, {
   betas: ['custom_checkout_payment_form_1'],
@@ -38,7 +39,7 @@ export default function Home() {
       // Checkout uses 500 for medium weight (ie. in the Pay Button)
       fontWeightMedium: '500',
       // Galtee primary color (button)
-      colorPrimary: '#222725',
+      colorPrimary: STRIPE_PRIMARY_COLOR,
     },
 
     // Make it look like Galtee Figma

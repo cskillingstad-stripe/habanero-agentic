@@ -32,9 +32,11 @@ export default function Habanero() {
 
   return (
     <div
+      id="habanero-container"
       style={{
         boxShadow: showBorder ? '0 0 0 2px #2563eb' : undefined,
         borderRadius: showBorder ? '8px' : undefined,
+        minHeight: '232px',
       }}
     >
       <PaymentFormElement

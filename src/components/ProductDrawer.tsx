@@ -1,17 +1,16 @@
 'use client';
 
-import {
-  Drawer,
-  Text,
-  Group,
-  Image,
-  Stack,
-  Button,
-} from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { Drawer, Text, Group, Image, Stack, ActionIcon, Box } from '@mantine/core';
+import { IconChevronLeft } from '@tabler/icons-react';
+import { STRIPE_PRIMARY_COLOR } from '@/constants';
 import { Item } from './ProductMessage';
-import { formatPrice } from './ProductMessage';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
-import Habanero from './Habanero';
+import { ProductDetailsView } from './ProductDetailsView';
+import { CheckoutView } from './CheckoutView';
+import { useRef } from 'react';
+
+const SIZE_OPTIONS = ['S', 'M', 'L'];
+const COLOR_OPTIONS = ['Black', 'Sage'];
 
 export const ProductDrawer = ({
   opened,
@@ -24,6 +23,48 @@ export const ProductDrawer = ({
   onExitTransitionEnd?: () => void;
   item: Item | null;
 }) => {
+  const [view, setView] = useState<'details' | 'checkout'>('details');
+  const [selectedSize, setSelectedSize] = useState(SIZE_OPTIONS[1]);
+  const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0]);
+  const [animatedHeight, setAnimatedHeight] = useState<number | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!opened) {
+      setView('details');
+      setSelectedSize(SIZE_OPTIONS[1]);
+      setSelectedColor(COLOR_OPTIONS[0]);
+      setAnimatedHeight(null);
+    }
+  }, [opened]);
+
+  const switchViewWithHeightTransition = (nextView: 'details' | 'checkout') => {
+    if (!contentRef.current) {
+      setView(nextView);
+      return;
+    }
+
+    const currentHeight = contentRef.current.getBoundingClientRect().height;
+    setAnimatedHeight(currentHeight);
+    setView(nextView);
+
+    requestAnimationFrame(() => {
+      if (!contentRef.current) {
+        return;
+      }
+      const nextHeight = contentRef.current.getBoundingClientRect().height;
+      setAnimatedHeight(nextHeight);
+    });
+  };
+
+  const goToCheckoutView = () => {
+    switchViewWithHeightTransition('checkout');
+  };
+
+  const goToDetailsView = () => {
+    switchViewWithHeightTransition('details');
+  };
+
   return (
     <Drawer
       opened={opened}
@@ -46,47 +87,68 @@ export const ProductDrawer = ({
           height: 'auto',
           borderTopLeftRadius: '20px',
           borderTopRightRadius: '20px',
+          display: 'flex',
+          flexDirection: 'column',
         },
+        body: { display: 'block' },
       }}
       title={
-        <Group gap={6}>
-          <Image src="/galtee.svg" alt="Galtee" maw={36} mah={36} />
-          <Stack gap={0}>
-            <Text size="sm" fw={500}>Galtee</Text>
-            <Text size="sm" c="dimmed">galteeoutdoors.com</Text>
-          </Stack>
+        <Group gap={6} justify="space-between" wrap="nowrap">
+          <Group gap={6} wrap="nowrap">
+            {view === 'checkout' && (
+              <ActionIcon
+                variant="transparent"
+                color={STRIPE_PRIMARY_COLOR}
+                onClick={goToDetailsView}
+                aria-label="Back to product details"
+                p={0}
+                ml={-12}
+              >
+                <IconChevronLeft size={21} />
+              </ActionIcon>
+            )}
+            <Image src="/galtee.svg" alt="Galtee" maw={36} mah={36} />
+            <Stack gap={0}>
+              <Text size="sm" fw={500}>
+                Galtee
+              </Text>
+              <Text size="sm" c="dimmed">
+                galteeoutdoors.com
+              </Text>
+            </Stack>
+          </Group>
         </Group>
       }
     >
-      <Stack gap="lg">
-        <Group>
-          <Image src={item?.image} alt={item?.name} maw={48} bdrs="md" />
-          <Stack gap="xs">
-            <Text size="sm" fw={500}>{item?.name}</Text>
-            <Group gap="sm">
-              <Text size="md" fw={500}>{formatPrice(item?.price ?? 0)}</Text>
-              <Button.Group>
-                <Button variant="default" size="xs" p={5} h={24}>
-                  <IconMinus size={12} />
-                </Button>
-                <Button.GroupSection
-                  variant="default"
-                  bg="var(--mantine-color-body)"
-                  size="xs"
-                  h={24}
-                  w={24}
-                >
-                  1
-                </Button.GroupSection>
-                <Button variant="default" size="xs" p={5} h={24}>
-                  <IconPlus size={12} />
-                </Button>
-              </Button.Group>
-            </Group>
-          </Stack>
-        </Group>
-        <Habanero />
-      </Stack>
+      <Box
+        style={{
+          overflow: 'hidden',
+          height: animatedHeight ?? 'auto',
+          transition: animatedHeight === null ? undefined : 'height 220ms ease',
+        }}
+        onTransitionEnd={(event) => {
+          if (event.propertyName === 'height') {
+            setAnimatedHeight(null);
+          }
+        }}
+      >
+        <Box ref={contentRef}>
+          {view === 'details' ? (
+            <ProductDetailsView
+              item={item}
+              sizeOptions={SIZE_OPTIONS}
+              colorOptions={COLOR_OPTIONS}
+              selectedSize={selectedSize}
+              selectedColor={selectedColor}
+              onSelectSize={setSelectedSize}
+              onSelectColor={setSelectedColor}
+              onBuy={goToCheckoutView}
+            />
+          ) : (
+            <CheckoutView item={item} />
+          )}
+        </Box>
+      </Box>
     </Drawer>
   );
 };
