@@ -4,8 +4,16 @@ import { Box, Button, Group, Image, Stack, Text } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import Habanero from './Habanero';
 import { formatPrice, Item } from './ProductMessage';
+import { useCheckout } from '@stripe/react-stripe-js/checkout';
 
 export const CheckoutView = ({ item }: { item: Item | null }) => {
+  const checkoutState = useCheckout();
+
+  const totalPrice =
+    checkoutState.type === 'success'
+      ? checkoutState.checkout?.lineItems?.[0]?.total?.amount
+      : '$0.00';
+
   return (
     <Stack gap="md" flex={1}>
       <Group>
@@ -16,7 +24,7 @@ export const CheckoutView = ({ item }: { item: Item | null }) => {
           </Text>
           <Group gap="sm">
             <Text size="md" fw={500}>
-              {formatPrice(item?.price ?? 0)}
+              {totalPrice}
             </Text>
             <Button.Group>
               <Button variant="default" size="xs" p={5} h={24}>
