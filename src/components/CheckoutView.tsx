@@ -3,7 +3,7 @@
 import { Box, Button, Group, Image, Stack, Text } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import Habanero from './Habanero';
-import { formatPrice, Item } from './ProductMessage';
+import { Item } from './ProductMessage';
 import { useCheckout } from '@stripe/react-stripe-js/checkout';
 
 export const CheckoutView = ({ item }: { item: Item | null }) => {
@@ -13,6 +13,25 @@ export const CheckoutView = ({ item }: { item: Item | null }) => {
     checkoutState.type === 'success'
       ? checkoutState.checkout?.lineItems?.[0]?.total?.amount
       : '$0.00';
+
+  const currentQuantity =
+    checkoutState.type === 'success'
+      ? checkoutState.checkout?.lineItems?.[0]?.quantity
+      : 1;
+
+  const updateQuantity = (quantity: number) => {
+    if (quantity < 1) {
+      return;
+    }
+
+    if (checkoutState.type === 'success') {
+      const { updateLineItemQuantity } = checkoutState.checkout;
+      updateLineItemQuantity({
+        lineItem: checkoutState.checkout?.lineItems?.[0]?.id,
+        quantity,
+      });
+    }
+  };
 
   return (
     <Stack gap="md" flex={1}>
@@ -27,7 +46,13 @@ export const CheckoutView = ({ item }: { item: Item | null }) => {
               {totalPrice}
             </Text>
             <Button.Group>
-              <Button variant="default" size="xs" p={5} h={24}>
+              <Button
+                variant="default"
+                size="xs"
+                p={5}
+                h={24}
+                onClick={() => updateQuantity(currentQuantity - 1)}
+              >
                 <IconMinus size={12} />
               </Button>
               <Button.GroupSection
@@ -37,9 +62,15 @@ export const CheckoutView = ({ item }: { item: Item | null }) => {
                 h={24}
                 w={24}
               >
-                1
+                {currentQuantity}
               </Button.GroupSection>
-              <Button variant="default" size="xs" p={5} h={24}>
+              <Button
+                variant="default"
+                size="xs"
+                p={5}
+                h={24}
+                onClick={() => updateQuantity(currentQuantity + 1)}
+              >
                 <IconPlus size={12} />
               </Button>
             </Button.Group>
