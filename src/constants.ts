@@ -3,12 +3,14 @@ export const ITEMS = {
     name: 'fleece',
     title: "Women's Galtymore Fleece",
     price: 16000,
+    usdPrice: 12146,
     image: '/products/fleece.png',
   },
   puffer: {
     name: 'puffer',
     title: "Men's Errigal Puffer Jacket",
     price: 31500,
+    usdPrice: 23198,
     image: '/products/puffer.png',
   },
 };

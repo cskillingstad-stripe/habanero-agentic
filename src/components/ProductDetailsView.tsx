@@ -33,7 +33,13 @@ export const ProductDetailsView = ({
 
   return (
     <Stack gap="md">
-      <Image src={item.image} alt={item.name} h={190} fit="contain" radius="md" />
+      <Image
+        src={item.image}
+        alt={item.name}
+        h={190}
+        fit="contain"
+        radius="md"
+      />
 
       <Group justify="space-between" align="flex-start" wrap="nowrap">
         <Stack gap={2} flex={1}>
@@ -45,7 +51,7 @@ export const ProductDetailsView = ({
           </Text>
         </Stack>
         <Text size="xl" fw={700} ml="md">
-          {formatPrice(item.price)}
+          {formatPrice(item.usdPrice)}
         </Text>
       </Group>
 

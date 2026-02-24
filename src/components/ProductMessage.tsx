@@ -19,22 +19,25 @@ export type Item = {
   name: string;
   description: string;
   price: number;
+  usdPrice: number;
   image: string;
 };
 
 const items = [
   {
     id: 'fleece',
-    name: 'Tunnel Vision',
+    name: "Women's Galtymore Fleece",
     description: 'Next-gen tech.',
     price: ITEMS.fleece.price,
+    usdPrice: ITEMS.fleece.usdPrice,
     image: ITEMS.fleece.image,
   },
   {
     id: 'puffer',
-    name: 'Passive Thought',
+    name: 'Errigal Puffer Jacket',
     description: 'Elevate your game.',
     price: ITEMS.puffer.price,
+    usdPrice: ITEMS.puffer.usdPrice,
     image: ITEMS.puffer.image,
   },
 ] as const;
@@ -95,9 +98,11 @@ export default function ProductMessage() {
                   height={120}
                   bdrs="md"
                 />
-                <Text size="sm">{item.name}</Text>
+                <Text size="sm" ta="center" mih={40}>
+                  {item.name}
+                </Text>
                 <Text fw={500} size="sm">
-                  {formatPrice(item.price)}
+                  {formatPrice(item.usdPrice)}
                 </Text>
                 <Rating value={4} readOnly size="xs" />
                 <Text size="xs" c="dimmed">
